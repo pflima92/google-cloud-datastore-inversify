@@ -30,7 +30,7 @@ class User {
 }
 
 @repository(User)
-interface UserRepository<User> {
+class UserRepository<User> {
 
     findById(id: string): Promise<User|undefined>;
     

@@ -4,7 +4,7 @@ namespace interfaces {
         target: any;
     }
 
-    export interface Repository { }
+    export interface Repository<T> { }
 
 }
 
