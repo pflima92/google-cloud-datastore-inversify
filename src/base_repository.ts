@@ -22,7 +22,7 @@ export abstract class BaseRepository<T> implements interfaces.Repository<T> {
 
     const kind = this.kind();
 
-    let keyValue: any;
+    let keyValue: Object;
 
     const idProperty = getIdProperty(t);
     if (idProperty) {
@@ -33,7 +33,7 @@ export abstract class BaseRepository<T> implements interfaces.Repository<T> {
       keyValue = Guid.create();
     }
 
-    const key = this.createKeys(kind, keyValue, ns);
+    const key = this.createKey(kind, keyValue, ns);
 
     const entity = {
       key: key,
@@ -53,13 +53,15 @@ export abstract class BaseRepository<T> implements interfaces.Repository<T> {
     return Promise.resolve(results.map(x => x as T));
   }
 
+  protected createKey(kind: string, key: any, ns?: Namespaced) {
+    return this._db.key({
+      ...ns,
+      path: [kind, key]
+    });
+  }
+
   protected createKeys(kind: string, keys: any[], ns?: Namespaced) {
-    return keys.map(k =>
-        this._db.key({
-          ...ns,
-          path: [kind, k]
-        })
-    );
+    return keys.map(k => this.createKey(kind, k, ns));
   }
 
   protected createQuery(queryRequest?: QueryRequest) {
