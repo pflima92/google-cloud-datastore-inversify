@@ -6,6 +6,7 @@
   "jsnext:main": "es/index.js",
   "typings": "./dts/index.d.ts",
   "scripts": {
+    "build": "gulp build",
     "test": "gulp",
     "publish-please": "publish-please",
     "prepublish": "publish-please guard",

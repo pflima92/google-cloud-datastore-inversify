@@ -1,5 +1,7 @@
 const TYPE = {
-    Repository: Symbol.for("Repository")
+    Datastore: Symbol.for("Datastore"),
+    Repository: Symbol.for("Repository"),
+    Entity: Symbol.for("Entity")
 };
 
 const METADATA_KEY = {
@@ -7,6 +9,7 @@ const METADATA_KEY = {
     repositoryMethod: "_repository-method",
     entity: "_entity",
     entityId: "_entity-id",
+    unindexed: "_unindexed",
 };
 
 export { TYPE, METADATA_KEY };
