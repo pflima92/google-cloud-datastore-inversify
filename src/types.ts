@@ -1,8 +1,9 @@
+export type EntityIdentifier<T> = any;
+
 export class ConfigOptions {
   public defaultNamespace: string | undefined = undefined;
   public validator: boolean;
 }
-
 export class Namespaced {
   public namespace: string | undefined;
 

@@ -2,7 +2,7 @@ import {inject, injectable} from "inversify";
 import {interfaces} from "./interfaces";
 import {METADATA_KEY, TYPE} from "./constants";
 import {Datastore} from "@google-cloud/datastore";
-import {Namespaced, QueryRequest} from "./types";
+import {EntityIdentifier, Namespaced, QueryRequest} from "./types";
 import {Guid} from "guid-typescript";
 import {classToPlain} from "class-transformer";
 import {queryBuilder} from "./query_builder";
@@ -72,10 +72,10 @@ export abstract class BaseRepository<T> implements interfaces.Repository<T> {
   }
 }
 
-type EntityIdentifier<T> = any;
 
 function getEntityIdentifier(target: any) {
-  return Reflect.getMetadata(METADATA_KEY.entity, target);
+  const metadata: interfaces.RepositoryMetadata = Reflect.getMetadata(METADATA_KEY.repository, target);
+  return metadata.entityIdentifier;
 }
 
 function getKind(target: any) {

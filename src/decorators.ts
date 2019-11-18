@@ -1,9 +1,14 @@
 import {decorate, injectable} from "inversify";
 import {METADATA_KEY} from "./constants";
+import {interfaces} from "./interfaces";
 
 export function repository(entityIdentifier: any) {
   return function (target: any) {
-    Reflect.defineMetadata(METADATA_KEY.repository, entityIdentifier, target);
+    const metadata: interfaces.RepositoryMetadata = {
+      target: target,
+      entityIdentifier: entityIdentifier
+    };
+    Reflect.defineMetadata(METADATA_KEY.repository, metadata, target);
     decorate(injectable(), target);
     return target;
   };

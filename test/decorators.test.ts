@@ -1,23 +1,27 @@
-import { expect } from "chai";
-import { repository } from "../src/decorators";
-import { interfaces } from "../src/interfaces";
-import { METADATA_KEY } from "../src/constants";
+import {expect} from "chai";
+import {entity, repository} from "../src";
+import {interfaces} from "../src";
+import {METADATA_KEY} from "../src/constants";
 
 describe("Unit Test: Repository Decorators", () => {
 
-    it("should add repository metadata to a class when decorated with @repository", (done) => {
+  it("should add repository metadata to a class when decorated with @repository", (done) => {
 
-        class MyEntity { }
+    @entity("MyEntityKind")
+    class MyEntity {
+    }
 
-        @repository(MyEntity)
-        class TestRepository { }
+    @repository(MyEntity)
+    class TestRepository {
+    }
 
-        let controllerMetadata: interfaces.RepositoryMetadata = Reflect.getMetadata(
-            METADATA_KEY.repository,
-            TestRepository
-        );
+    let repositoryMetadata: interfaces.RepositoryMetadata = Reflect.getMetadata(
+        METADATA_KEY.repository,
+        TestRepository
+    );
 
-        expect(controllerMetadata.target).eql(TestRepository);
-        done();
-    });
+    expect(repositoryMetadata.target).eql(TestRepository);
+    expect(repositoryMetadata.entityIdentifier).eql(MyEntity);
+    done();
+  });
 });

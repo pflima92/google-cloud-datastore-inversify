@@ -6,7 +6,6 @@ const TYPE = {
 
 const METADATA_KEY = {
     repository: "_repository",
-    repositoryMethod: "_repository-method",
     entity: "_entity",
     entityId: "_entity-id",
     unindexed: "_unindexed",

@@ -1,9 +1,10 @@
-import {Namespaced, QueryRequest} from "./types";
+import {EntityIdentifier, Namespaced, QueryRequest} from "./types";
 
 namespace interfaces {
 
   export interface RepositoryMetadata {
     target: any;
+    entityIdentifier: EntityIdentifier<any>;
   }
 
   export interface Repository<T> {
