@@ -19,4 +19,6 @@ wallaby.js
 .travis.yml
 .gitignore
 .vscode
+.idea
+.github
 type_definitions
