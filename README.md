@@ -1,4 +1,6 @@
-# Google Cloud Datastore Inversify
+# Inversify - Google Cloud Datastore 
+
+[![Build Status](https://travis-ci.com/pflima92/google-cloud-datastore-inversify.svg?branch=master)](https://travis-ci.com/pflima92/google-cloud-datastore-inversify)
 
 Some utilities for the development of Google Cloud Datastore applications using Inversify.
 
@@ -20,29 +22,17 @@ Please refer to the [InversifyJS documentation](https://github.com/inversify/Inv
 To use a class as a "repository" for your node app, simply add the `@repository` decorator to the class. 
 
 ```ts
-import { entity, key, repository } from 'datastore-inversify';
+import { entity, id, repository } from 'datastore-inversify';
 
 @entity('UserKind')
 class User {
-    @key
+    @id
     id: string;
     name: string;
 }
 
 @repository(User)
 class UserRepository<User> extends BaseRepository<User> {
-
-    exists(id: any, ns?: Namespaced): Promise<boolean>;
-    exists(queryRequest?: QueryRequest): Promise<boolean>;
-    findById(id: any, ns?: Namespaced): Promise<User>;
-    findAll(queryRequest?: QueryRequest): Promise<User[]>;
-    findAllById(ids: any[], ns?: Namespaced): Promise<User[]>;
-    save(t: User, ns?: Namespaced): Promise<User>;
-    saveAll(ts: User[], ns?: Namespaced): Promise<User[]>;
-    remove(t: User, ns?: Namespaced): Promise<boolean>;
-    remove(id: any, ns?: Namespaced): Promise<boolean>;
-    removeAll(t: User[], ns?: Namespaced): Promise<boolean>;
-    removeAll(id: any[], ns?: Namespaced): Promise<boolean>;
 }
 ```
 
@@ -56,8 +46,16 @@ import { Container } from 'inversify';
 // set up container
 let container = new Container();
 
+// set up datastore
+let datastore = new Datastore();
+
 // set up bindings
+container.bind<Datastore>(Datastore).toConstantValue(datastore);
+
+// Bind your repositories
 container.bind<UserRepository>(UserRepository).toSelf();
+
+// Bind your components
 container.bind<FooService>('FooService').to(FooService);
 
 @injectable()

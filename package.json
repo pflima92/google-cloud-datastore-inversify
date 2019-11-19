@@ -1,6 +1,6 @@
 {
   "name": "inversify-datastore",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "Some utilities for the development of Google Cloud Datastore applications using Inversify",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
@@ -23,7 +23,11 @@
     "Google Cloud Datastore",
     "Datastore"
   ],
-  "author": "Paulo Lima",
+  "author": {
+    "email": "pflima92@gmail.com",
+    "name": "Paulo Lima",
+    "url": "https://github.com/pflima92"
+  },
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pflima92/google-cloud-datastore-inversify/issues"
