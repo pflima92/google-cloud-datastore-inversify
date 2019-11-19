@@ -1,8 +1,8 @@
 import {inject, injectable} from "inversify";
 import {interfaces} from "./interfaces";
-import {METADATA_KEY, TYPE} from "./constants";
+import {METADATA_KEY} from "./constants";
 import {Datastore} from "@google-cloud/datastore";
-import {EntityIdentifier, Namespaced, QueryRequest, EntityValidationError} from "./types";
+import {EntityIdentifier, EntityValidationError, Namespaced, QueryRequest} from "./types";
 import {Guid} from "guid-typescript";
 import {classToPlain, plainToClass} from "class-transformer";
 import {queryBuilder} from "./query_builder";
@@ -14,7 +14,7 @@ export class BaseRepository<T> implements interfaces.Repository<T> {
   private readonly _entityIdentifier: EntityIdentifier<T>;
   private _db: Datastore;
 
-  constructor(@inject(TYPE.Datastore) db: Datastore) {
+  constructor(@inject(Datastore) db: Datastore) {
     this._entityIdentifier = getEntityIdentifier(this.constructor);
     this._db = db;
   }

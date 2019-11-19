@@ -1,6 +1,6 @@
 import {expect} from "chai";
 
-import {BaseRepository, entity, id, repository, TYPE, EntityValidationError} from "../src";
+import {BaseRepository, entity, id, repository} from "../src";
 import {Container} from "inversify";
 import {Datastore} from "@google-cloud/datastore";
 import {anything, capture, instance, mock, verify, when} from "ts-mockito";
@@ -14,7 +14,7 @@ describe("Unit Test: BaseRepository", () => {
   beforeEach("setup", function (done) {
     container = new Container();
     const mockDbInstance = instance(mockDb);
-    container.bind(TYPE.Datastore).toConstantValue(mockDbInstance);
+    container.bind(Datastore).toConstantValue(mockDbInstance);
     done();
   });
 
