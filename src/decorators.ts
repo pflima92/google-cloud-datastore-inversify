@@ -1,6 +1,7 @@
 import {decorate, injectable} from "inversify";
-import {METADATA_KEY} from "./constants";
+import {CONTRAINTS, METADATA_KEY} from "./constants";
 import {interfaces} from "./interfaces";
+import {registerDecorator, ValidationArguments, ValidationOptions} from "class-validator";
 
 export function repository(entityIdentifier: any) {
   return function (target: any) {
@@ -18,15 +19,20 @@ export function entity(kind: string) {
   return Reflect.metadata(METADATA_KEY.entity, kind);
 }
 
-export function id() {
+export function id(validationOptions?: ValidationOptions) {
   return (target: object, propertyKey: string) => {
     Reflect.defineMetadata(METADATA_KEY.entityId, propertyKey, target);
+
+    registerDecorator({
+      name: "isValidId",
+      target: target.constructor,
+      propertyName: propertyKey,
+      options: validationOptions,
+      validator: {
+        validate(value: any) {
+          return value && value.length > 0 && !CONTRAINTS.id.test(value);
+        }
+      }
+    });
   };
 }
-
-export function unindexed() {
-  return (target: object, propertyKey: string) => {
-    Reflect.defineMetadata(METADATA_KEY.unindexed, propertyKey, target);
-  };
-}
-

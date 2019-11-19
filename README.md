@@ -30,13 +30,19 @@ class User {
 }
 
 @repository(User)
-class UserRepository<User> {
+class UserRepository<User> extends BaseRepository<User> {
 
-    findById(id: string): Promise<User|undefined>;
-    
-    findAll(): Promise<User[]>;
-
-    save(entity: User): Promise<User>;
+    exists(id: any, ns?: Namespaced): Promise<boolean>;
+    exists(queryRequest?: QueryRequest): Promise<boolean>;
+    findById(id: any, ns?: Namespaced): Promise<User>;
+    findAll(queryRequest?: QueryRequest): Promise<User[]>;
+    findAllById(ids: any[], ns?: Namespaced): Promise<User[]>;
+    save(t: User, ns?: Namespaced): Promise<User>;
+    saveAll(ts: User[], ns?: Namespaced): Promise<User[]>;
+    remove(t: User, ns?: Namespaced): Promise<boolean>;
+    remove(id: any, ns?: Namespaced): Promise<boolean>;
+    removeAll(t: User[], ns?: Namespaced): Promise<boolean>;
+    removeAll(id: any[], ns?: Namespaced): Promise<boolean>;
 }
 ```
 
@@ -47,13 +53,11 @@ Configure the inversify container in your composition root as usual.
 ```ts
 import { Container } from 'inversify';
 
-// declare metadata by @controller annotation
-import "./repositories/user_repository";
-
 // set up container
 let container = new Container();
 
 // set up bindings
+container.bind<UserRepository>(UserRepository).toSelf();
 container.bind<FooService>('FooService').to(FooService);
 
 @injectable()

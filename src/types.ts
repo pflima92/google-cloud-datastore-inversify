@@ -1,9 +1,7 @@
+import {ValidationError} from "class-validator";
+
 export type EntityIdentifier<T> = any;
 
-export class ConfigOptions {
-  public defaultNamespace: string | undefined = undefined;
-  public validator: boolean;
-}
 export class Namespaced {
   public namespace: string | undefined;
 
@@ -40,7 +38,6 @@ export const Operator = {
   GREATER_THAN_OR_EQUAL: ">="
 };
 
-
 export class Order {
   public field: string;
   public descending: boolean;
@@ -52,5 +49,15 @@ export class Order {
   constructor(field: string, descending: boolean) {
     this.field = field;
     this.descending = descending;
+  }
+}
+
+export class EntityValidationError extends Error {
+
+  public errors: ValidationError[];
+
+  constructor(errors: ValidationError[]) {
+    super("Validation failed");
+    this.errors = errors;
   }
 }

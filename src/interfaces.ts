@@ -8,13 +8,28 @@ namespace interfaces {
   }
 
   export interface Repository<T> {
-    save(t: T, ns?: Namespaced): Promise<T>;
+
+    exists(id: any, ns?: Namespaced): Promise<boolean>;
+
+    exists(queryRequest?: QueryRequest): Promise<boolean>;
+
+    findById(id: any, ns?: Namespaced): Promise<T>;
 
     findAll(queryRequest?: QueryRequest): Promise<T[]>;
-  }
 
-  export interface NamespaceResolver {
-    resolve(): string;
+    findAllById(ids: any[], ns?: Namespaced): Promise<T[]>;
+
+    save(t: T, ns?: Namespaced): Promise<T>;
+
+    saveAll(ts: T[], ns?: Namespaced): Promise<T[]>;
+
+    remove(t: T, ns?: Namespaced): Promise<boolean>;
+
+    remove(id: any, ns?: Namespaced): Promise<boolean>;
+
+    removeAll(t: T[], ns?: Namespaced): Promise<boolean>;
+
+    removeAll(id: any[], ns?: Namespaced): Promise<boolean>;
   }
 }
 

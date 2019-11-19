@@ -1,15 +1,14 @@
 import {TYPE} from "./constants";
-import {entity, id, repository, unindexed} from "./decorators";
+import {entity, id, repository} from "./decorators";
 import {interfaces} from "./interfaces";
 import {BaseRepository} from "./base_repository";
-import {Filter, Operator, Order, QueryRequest, Namespaced} from "./types";
+import {Filter, Operator, Order, QueryRequest, Namespaced, EntityValidationError} from "./types";
 
 export {
   TYPE,
   entity,
   id,
   repository,
-  unindexed,
   interfaces,
   BaseRepository,
   Filter,
@@ -17,4 +16,5 @@ export {
   Namespaced,
   Operator,
   Order,
+  EntityValidationError
 };
