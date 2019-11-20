@@ -2,6 +2,7 @@ import {entity, id, repository} from "./decorators";
 import {interfaces} from "./interfaces";
 import {BaseRepository} from "./base_repository";
 import {EntityValidationError, Filter, Namespaced, Operator, Order, QueryRequest} from "./types";
+import {TYPES} from "./constants";
 
 export {
   entity,
@@ -14,5 +15,6 @@ export {
   QueryRequest,
   Namespaced,
   Operator,
-  Order
+  Order,
+  TYPES
 };

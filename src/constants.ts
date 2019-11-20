@@ -1,7 +1,5 @@
-const TYPE = {
-  Datastore: Symbol.for("Datastore"),
-  Repository: Symbol.for("Repository"),
-  Entity: Symbol.for("Entity")
+const TYPES = {
+  Datastore: Symbol.for("Datastore")
 };
 
 const METADATA_KEY = {
@@ -15,4 +13,4 @@ const CONTRAINTS = {
   id: new RegExp("__.*__")
 };
 
-export {TYPE, METADATA_KEY, CONTRAINTS};
+export {TYPES, METADATA_KEY, CONTRAINTS};
