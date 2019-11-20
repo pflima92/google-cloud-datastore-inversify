@@ -2,6 +2,7 @@ import {decorate, injectable} from "inversify";
 import {CONTRAINTS, METADATA_KEY} from "./constants";
 import {interfaces} from "./interfaces";
 import {registerDecorator, ValidationOptions} from "class-validator";
+import EntityOptions = interfaces.EntityOptions;
 
 /**
  * Decorates a Google Datastore Repository
@@ -22,9 +23,14 @@ export function repository(entityIdentifier: any) {
 /**
  * Decorates an entity.
  * @param kind the kind name of an entity.
+ * @param entityOptions the options for serialization
  */
-export function entity(kind: string) {
-  return Reflect.metadata(METADATA_KEY.entity, kind);
+export function entity(kind: string, entityOptions?: EntityOptions) {
+  const metadata: interfaces.EntityMedata = {
+    kind: kind,
+    entityOptions: entityOptions
+  };
+  return Reflect.metadata(METADATA_KEY.entity, metadata);
 }
 
 /**

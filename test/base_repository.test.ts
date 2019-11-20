@@ -5,6 +5,7 @@ import {Container} from "inversify";
 import {Datastore} from "@google-cloud/datastore";
 import {anything, capture, instance, mock, verify, when} from "ts-mockito";
 import {IsEmail} from "class-validator";
+import {Expose} from "class-transformer";
 
 describe("Unit Test: BaseRepository", () => {
 
@@ -62,6 +63,41 @@ describe("Unit Test: BaseRepository", () => {
     });
   });
 
+  it("should save an entity and excludeExtraneousValues when decorated", (done) => {
+
+    @entity("MyEntityKind", {excludeExtraneousValues: true})
+    class MyEntityIgnoringValidation {
+      @id()
+      @Expose()
+      public entityId: string;
+      public transientField: string;
+    }
+
+    @repository(MyEntityIgnoringValidation)
+    class TestRepositoryIgnoringValidation extends BaseRepository<MyEntityIgnoringValidation> {
+    }
+
+    // Setup Container
+    container.bind<TestRepositoryIgnoringValidation>(TestRepositoryIgnoringValidation).toSelf();
+    const fixture = container.get<TestRepositoryIgnoringValidation>(TestRepositoryIgnoringValidation);
+
+    // Give Parameters
+    const t = new MyEntityIgnoringValidation();
+    t.entityId = "some_id";
+    t.transientField = "some_value";
+
+    // @ts-ignore
+    when(mockDb.save(anything())).thenResolve();
+
+    // Then
+    fixture.save(t).then(result => {
+      const [saveRequest] = capture(mockDb.save).last();
+      expect(saveRequest.data.entityId).eql("some_id");
+      expect(saveRequest.data.transientField).eql(undefined);
+      done();
+    });
+  });
+
   it("should validate an entity annotated with validators and fail if it is not valid", async () => {
 
     @entity("MyEntityKind")
@@ -115,10 +151,10 @@ describe("Unit Test: BaseRepository", () => {
     container.bind<TestRepository>(TestRepository).toSelf();
     const fixture = container.get<TestRepository>(TestRepository);
 
-
     let expResponse = [[
       {entityId: "1", nonMappedValue: ""}
     ], {}];
+
     // @ts-ignore
     when(mockDb.runQuery(anything())).thenResolve(expResponse);
 

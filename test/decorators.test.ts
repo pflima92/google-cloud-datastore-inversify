@@ -26,16 +26,19 @@ describe("Unit Test: Decorators", () => {
 
   it("should add repository metadata to a class when decorated with @entity", (done) => {
 
-    @entity("MyEntityKind")
+    @entity("MyEntityKind", {excludeExtraneousValues: true})
     class MyEntity {
       @id()
       public entityId: string;
     }
 
-    let kind: string = Reflect.getMetadata(
+    let metadata: interfaces.EntityMedata = Reflect.getMetadata(
         METADATA_KEY.entity,
         MyEntity
     );
+
+    let kind: string = metadata.kind;
+    let entityOptions = metadata.entityOptions;
 
     let entityId: string = Reflect.getMetadata(
         METADATA_KEY.entityId,
@@ -43,6 +46,8 @@ describe("Unit Test: Decorators", () => {
     );
 
     expect(kind).eql("MyEntityKind");
+    expect(entityOptions
+        && entityOptions.excludeExtraneousValues).eql(true);
     expect(entityId).eql("entityId");
     done();
   });

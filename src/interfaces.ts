@@ -7,6 +7,15 @@ namespace interfaces {
     entityIdentifier: EntityIdentifier<any>;
   }
 
+  export interface EntityMedata {
+    kind: string;
+    entityOptions?: EntityOptions;
+  }
+
+  export interface EntityOptions {
+    excludeExtraneousValues?: false | true;
+  }
+
   export interface CrudRepository<T> {
 
     /**
