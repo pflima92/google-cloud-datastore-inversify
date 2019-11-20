@@ -34,6 +34,8 @@ class User {
 @repository(User)
 class UserRepository<User> extends BaseRepository<User> {
 }
+
+export {User, UserRepository}
 ```
 
 ### Step 2: Configure container
@@ -42,6 +44,7 @@ Configure the inversify container in your composition root as usual.
 
 ```ts
 import { Container } from 'inversify';
+import { TYPES } from 'inversify-datastore';
 
 // set up container
 let container = new Container();
@@ -50,7 +53,7 @@ let container = new Container();
 let datastore = new Datastore();
 
 // set up bindings
-container.bind<Datastore>(Datastore).toConstantValue(datastore);
+container.bind<Datastore>(TYPES.Datastore).toConstantValue(datastore);
 
 // Bind your repositories
 container.bind<UserRepository>(UserRepository).toSelf();
