@@ -26,7 +26,7 @@ import { entity, id, repository } from 'datastore-inversify';
 
 @entity('UserKind')
 class User {
-    @id
+    @id()
     id: string;
     name: string;
 }

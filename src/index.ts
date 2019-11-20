@@ -9,10 +9,10 @@ export {
   repository,
   interfaces,
   BaseRepository,
+  EntityValidationError,
   Filter,
   QueryRequest,
   Namespaced,
   Operator,
-  Order,
-  EntityValidationError
+  Order
 };

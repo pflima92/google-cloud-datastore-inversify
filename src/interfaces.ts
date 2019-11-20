@@ -7,7 +7,7 @@ namespace interfaces {
     entityIdentifier: EntityIdentifier<any>;
   }
 
-  export interface Repository<T> {
+  export interface CrudRepository<T> {
 
     /**
      * Check if the given ID belongs to an entity in Cloud Datastore.

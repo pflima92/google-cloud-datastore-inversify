@@ -9,10 +9,10 @@ import {queryBuilder} from "./query_builder";
 import {validate} from "class-validator";
 
 @injectable()
-export class BaseRepository<T> implements interfaces.Repository<T> {
+export class BaseRepository<T> implements interfaces.CrudRepository<T> {
 
+  protected _db: Datastore;
   private readonly _entityIdentifier: EntityIdentifier<T>;
-  private _db: Datastore;
 
   constructor(@inject(Datastore) db: Datastore) {
     this._entityIdentifier = getEntityIdentifier(this.constructor);
@@ -96,6 +96,11 @@ export class BaseRepository<T> implements interfaces.Repository<T> {
     return Promise.resolve(true);
   }
 
+  protected createQuery(queryRequest?: QueryRequest) {
+    const kind = this.kind();
+    return queryBuilder(this._db.createQuery(kind), queryRequest);
+  }
+
   protected createKey(kind: string, key: any, ns?: Namespaced) {
     if (key instanceof this._entityIdentifier) {
       const idProperty = getIdProperty(key);
@@ -131,20 +136,14 @@ export class BaseRepository<T> implements interfaces.Repository<T> {
 
     const key = this.createKey(kind, keyValue, ns);
 
-    const entity = {
+    return {
       key: key,
       data: classToPlain(concreteClass),
     };
-    return entity;
   }
 
   protected createKeys(kind: string, keys: any[], ns?: Namespaced) {
     return keys.map(k => this.createKey(kind, k, ns));
-  }
-
-  protected createQuery(queryRequest?: QueryRequest) {
-    const kind = this.kind();
-    return queryBuilder(this._db.createQuery(kind), queryRequest);
   }
 
   protected kind() {

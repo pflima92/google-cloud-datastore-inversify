@@ -26,16 +26,32 @@ export class QueryRequest extends Namespaced {
 }
 
 export class Filter {
+
   public static KEY = "__key__";
+
+  public property: string;
+  public operator: Operator;
+  public value: string;
+
+  public static create(field: string, operator: any, value: any): Filter {
+    return new Filter(field, operator, value);
+  }
+
+  constructor(property: string, operator: Operator, value: string) {
+    this.property = name;
+    this.operator = operator;
+    this.value = value;
+  }
 }
 
-export const Operator = {
+export type Operator = {
   EQUAL: "=",
   NOT_EQUAL: "!=",
   LESS_THAN: "<",
   LESS_THAN_OR_EQUAL: "<=",
   GREATER_THAN: ">",
-  GREATER_THAN_OR_EQUAL: ">="
+  GREATER_THAN_OR_EQUAL: ">=",
+  HAS_ANCESTOR: "HAS_ANCESTOR"
 };
 
 export class Order {

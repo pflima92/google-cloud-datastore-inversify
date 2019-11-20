@@ -1,6 +1,5 @@
 import {expect} from "chai";
-import {entity, id, repository} from "../src";
-import {interfaces} from "../src";
+import {entity, id, interfaces, repository} from "../src";
 import {METADATA_KEY} from "../src/constants";
 
 describe("Unit Test: Repository Decorators", () => {
