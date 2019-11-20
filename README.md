@@ -1,6 +1,8 @@
 # Inversify - Google Cloud Datastore 
 
 [![Build Status](https://travis-ci.com/pflima92/google-cloud-datastore-inversify.svg?branch=master)](https://travis-ci.com/pflima92/google-cloud-datastore-inversify)
+[![npm version](https://badge.fury.io/js/inversify-datastore.svg)](https://badge.fury.io/js/inversify-datastore)
+[![Dependencies](https://david-dm.org/pflima92/google-cloud-datastore-inversify.svg)](https://david-dm.org/pflima92/google-cloud-datastore-inversify#info=dependencies)
 
 Some utilities for the development of Google Cloud Datastore applications using Inversify.
 
@@ -9,7 +11,7 @@ Some utilities for the development of Google Cloud Datastore applications using 
 You can install `inversify-datastore` using npm:
 
 ```sh
-npm install inversify inversify-datastore reflect-metadata --save
+npm install inversify inversify-datastore reflect-metadata @google-cloud/datastore --save
 ```
 
 The `inversify-datastore` type definitions are included in the npm module and require TypeScript 2.0.
@@ -53,28 +55,15 @@ let container = new Container();
 let datastore = new Datastore();
 
 // set up bindings
-container.bind<Datastore>(TYPES.Datastore).toConstantValue(datastore);
+container.bind(TYPES.Datastore).toConstantValue(datastore);
 
 // Bind your repositories
 container.bind<UserRepository>(UserRepository).toSelf();
-
-// Bind your components
-container.bind<FooService>('FooService').to(FooService);
-
-@injectable()
-class FooService {
-
-    repository: UserRepository;
-
-    constructor(@inject(UserRepository) repository: UserRepository){
-        this.repository = repository;
-    }
-}
-
 ```
-## Examples
 
-Some examples can be found at the [google-cloud-datastore-inversify-example](https://github.com/pflima92/google-cloud-datastore-inversify-example) repository.
+## Documentation
+
+Read the [basics](https://github.com/pflima92/google-cloud-datastore-inversify#the-basics) for a 2 minutes introduction. After that, head to the [documentation](https://github.com/pflima92/google-cloud-datastore-inversify/wiki), or checkout the [source code](https://github.com/pflima92/google-cloud-datastore-inversify-example) of the demo for an example usage.
 
 ## License
 

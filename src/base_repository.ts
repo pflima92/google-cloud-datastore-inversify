@@ -4,9 +4,10 @@ import {METADATA_KEY, TYPES} from "./constants";
 import {Datastore} from "@google-cloud/datastore";
 import {EntityIdentifier, EntityValidationError, Namespaced, QueryRequest} from "./types";
 import {Guid} from "guid-typescript";
-import {classToPlain, plainToClass} from "class-transformer";
+import {classToPlain, ClassTransformOptions, plainToClass} from "class-transformer";
 import {queryBuilder} from "./query_builder";
 import {validate} from "class-validator";
+import EntityOptions = interfaces.EntityOptions;
 
 @injectable()
 export class BaseRepository<T> implements interfaces.CrudRepository<T> {
@@ -115,6 +116,9 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
 
   protected async mapData(t: T, ns?: Namespaced): Promise<EntityRequest> {
     const kind = this.kind();
+    const entityOptions: interfaces.EntityOptions = getEntityOptions(this._entityIdentifier) || {
+      excludeExtraneousValues: false
+    };
 
     let keyValue: Object;
 
@@ -136,9 +140,17 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
 
     const key = this.createKey(kind, keyValue, ns);
 
+    let classTransformOptions: ClassTransformOptions | undefined;
+    if (entityOptions && entityOptions.excludeExtraneousValues) {
+      classTransformOptions = {excludeExtraneousValues: true};
+    }
+    const data = classToPlain(concreteClass, classTransformOptions);
+    const excludeFromIndexes = getExcludeFromIndexes(concreteClass);
+
     return {
       key: key,
-      data: classToPlain(concreteClass),
+      data: data,
+      excludeFromIndexes: excludeFromIndexes
     };
   }
 
@@ -156,15 +168,28 @@ function getEntityIdentifier(target: any) {
   return metadata.entityIdentifier;
 }
 
-function getKind(target: any) {
+function getEntityMetadata(target: any): interfaces.EntityMedata {
   return Reflect.getMetadata(METADATA_KEY.entity, target);
+}
+
+function getKind(target: any): string {
+  return getEntityMetadata(target).kind;
+}
+
+function getEntityOptions(target: any): EntityOptions | undefined {
+  return getEntityMetadata(target).entityOptions;
 }
 
 function getIdProperty(target: any) {
   return Reflect.getMetadata(METADATA_KEY.entityId, target);
 }
 
+function getExcludeFromIndexes(target: any): string[] {
+  return Reflect.getMetadata(METADATA_KEY.excludeFromIndexes, target) || [];
+}
+
 interface EntityRequest {
   key: any;
   data: any;
+  excludeFromIndexes: string[];
 }

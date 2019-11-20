@@ -2,6 +2,7 @@ import {decorate, injectable} from "inversify";
 import {CONTRAINTS, METADATA_KEY} from "./constants";
 import {interfaces} from "./interfaces";
 import {registerDecorator, ValidationOptions} from "class-validator";
+import EntityOptions = interfaces.EntityOptions;
 
 /**
  * Decorates a Google Datastore Repository
@@ -22,9 +23,14 @@ export function repository(entityIdentifier: any) {
 /**
  * Decorates an entity.
  * @param kind the kind name of an entity.
+ * @param entityOptions the options for serialization
  */
-export function entity(kind: string) {
-  return Reflect.metadata(METADATA_KEY.entity, kind);
+export function entity(kind: string, entityOptions?: EntityOptions) {
+  const metadata: interfaces.EntityMedata = {
+    kind: kind,
+    entityOptions: entityOptions
+  };
+  return Reflect.metadata(METADATA_KEY.entity, metadata);
 }
 
 /**
@@ -46,5 +52,16 @@ export function id(validationOptions?: ValidationOptions) {
         }
       }
     });
+  };
+}
+
+/**
+ * The field decorated will be excluded from entity indexes.
+ */
+export function excludeFromIndex() {
+  return (target: object, propertyKey: string) => {
+    let excludeFromIndexes = Reflect.getMetadata(METADATA_KEY.excludeFromIndexes, target) || [];
+    excludeFromIndexes.push(propertyKey);
+    Reflect.defineMetadata(METADATA_KEY.excludeFromIndexes, excludeFromIndexes, target);
   };
 }
