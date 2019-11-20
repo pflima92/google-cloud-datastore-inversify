@@ -135,10 +135,13 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
     }
 
     const key = this.createKey(kind, keyValue, ns);
+    const data = classToPlain(concreteClass);
+    const excludeFromIndexes = getExcludeFromIndexes(concreteClass);
 
     return {
       key: key,
-      data: classToPlain(concreteClass),
+      data: data,
+      excludeFromIndexes: excludeFromIndexes
     };
   }
 
@@ -164,7 +167,12 @@ function getIdProperty(target: any) {
   return Reflect.getMetadata(METADATA_KEY.entityId, target);
 }
 
+function getExcludeFromIndexes(target: any): string[] {
+  return Reflect.getMetadata(METADATA_KEY.unindexed, target) || [];
+}
+
 interface EntityRequest {
   key: any;
   data: any;
+  excludeFromIndexes: string[];
 }

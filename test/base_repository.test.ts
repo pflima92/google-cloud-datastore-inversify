@@ -1,6 +1,6 @@
 import {expect} from "chai";
 
-import {BaseRepository, entity, id, repository, TYPES} from "../src";
+import {BaseRepository, entity, id, repository, TYPES, unindexed} from "../src";
 import {Container} from "inversify";
 import {Datastore} from "@google-cloud/datastore";
 import {anything, capture, instance, mock, verify, when} from "ts-mockito";
@@ -24,6 +24,8 @@ describe("Unit Test: BaseRepository", () => {
     class MyEntity {
       @id()
       public entityId: string;
+      @unindexed()
+      public unindexedProperty: string;
     }
 
     @repository(MyEntity)
@@ -37,6 +39,7 @@ describe("Unit Test: BaseRepository", () => {
     // Give Parameters
     const t = new MyEntity();
     t.entityId = "foo";
+    t.unindexedProperty = "bar";
 
     let mockKey = {};
 
@@ -53,6 +56,7 @@ describe("Unit Test: BaseRepository", () => {
       expect(result).eql(t);
       expect(saveRequest.key).eql(mockKey);
       expect(saveRequest.data).eql(t);
+      expect(saveRequest.excludeFromIndexes).contains("unindexedProperty");
 
       done();
     });

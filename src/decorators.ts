@@ -48,3 +48,14 @@ export function id(validationOptions?: ValidationOptions) {
     });
   };
 }
+
+/**
+ * The field decorated will be unindexed.
+ */
+export function unindexed() {
+  return (target: object, propertyKey: string) => {
+    let unIndexedFields = Reflect.getMetadata(METADATA_KEY.unindexed, target) || [];
+    unIndexedFields.push(propertyKey);
+    Reflect.defineMetadata(METADATA_KEY.unindexed, unIndexedFields, target);
+  };
+}

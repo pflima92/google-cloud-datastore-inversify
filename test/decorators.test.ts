@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {entity, id, interfaces, repository} from "../src";
+import {entity, id, interfaces, repository, unindexed} from "../src";
 import {METADATA_KEY} from "../src/constants";
 
 describe("Unit Test: Repository Decorators", () => {
@@ -33,6 +33,10 @@ describe("Unit Test: Entity Decorators", () => {
     class MyEntity {
       @id()
       public entityId: string;
+      @unindexed()
+      public unindexedField1: string;
+      @unindexed()
+      public unindexedField2: number[];
     }
 
     let kind: string = Reflect.getMetadata(
@@ -45,8 +49,15 @@ describe("Unit Test: Entity Decorators", () => {
         new MyEntity()
     );
 
+    let unindexedFields: string[] = Reflect.getMetadata(
+        METADATA_KEY.unindexed,
+        new MyEntity()
+    );
+
     expect(kind).eql("MyEntityKind");
     expect(entityId).eql("entityId");
+    expect(unindexedFields).contains("unindexedField1");
+    expect(unindexedFields).contains("unindexedField2");
     done();
   });
 });
