@@ -1,6 +1,6 @@
 import {inject, injectable} from "inversify";
 import {interfaces} from "./interfaces";
-import {METADATA_KEY} from "./constants";
+import {METADATA_KEY, TYPES} from "./constants";
 import {Datastore} from "@google-cloud/datastore";
 import {EntityIdentifier, EntityValidationError, Namespaced, QueryRequest} from "./types";
 import {Guid} from "guid-typescript";
@@ -14,9 +14,9 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
   protected _db: Datastore;
   private readonly _entityIdentifier: EntityIdentifier<T>;
 
-  constructor(@inject(Datastore) db: Datastore) {
+  constructor(@inject(TYPES.Datastore) datastore: Datastore) {
     this._entityIdentifier = getEntityIdentifier(this.constructor);
-    this._db = db;
+    this._db = datastore;
   }
 
   public async exists(id: any, ns?: Namespaced): Promise<boolean>;
