@@ -168,7 +168,7 @@ function getIdProperty(target: any) {
 }
 
 function getExcludeFromIndexes(target: any): string[] {
-  return Reflect.getMetadata(METADATA_KEY.unindexed, target) || [];
+  return Reflect.getMetadata(METADATA_KEY.excludeFromIndexes, target) || [];
 }
 
 interface EntityRequest {

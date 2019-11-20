@@ -6,7 +6,7 @@ const METADATA_KEY = {
   repository: "_repository",
   entity: "_entity",
   entityId: "_entity-id",
-  unindexed: "_unindexed",
+  excludeFromIndexes: "_excludeFromIndexes",
 };
 
 const CONTRAINTS = {

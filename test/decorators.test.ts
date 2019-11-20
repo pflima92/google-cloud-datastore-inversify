@@ -1,8 +1,8 @@
 import {expect} from "chai";
-import {entity, id, interfaces, repository, unindexed} from "../src";
+import {entity, excludeFromIndex, id, interfaces, repository} from "../src";
 import {METADATA_KEY} from "../src/constants";
 
-describe("Unit Test: Repository Decorators", () => {
+describe("Unit Test: Decorators", () => {
 
   it("should add repository metadata to a class when decorated with @repository", (done) => {
 
@@ -23,9 +23,6 @@ describe("Unit Test: Repository Decorators", () => {
     expect(repositoryMetadata.entityIdentifier).eql(MyEntity);
     done();
   });
-});
-
-describe("Unit Test: Entity Decorators", () => {
 
   it("should add repository metadata to a class when decorated with @entity", (done) => {
 
@@ -33,10 +30,6 @@ describe("Unit Test: Entity Decorators", () => {
     class MyEntity {
       @id()
       public entityId: string;
-      @unindexed()
-      public unindexedField1: string;
-      @unindexed()
-      public unindexedField2: number[];
     }
 
     let kind: string = Reflect.getMetadata(
@@ -49,15 +42,30 @@ describe("Unit Test: Entity Decorators", () => {
         new MyEntity()
     );
 
-    let unindexedFields: string[] = Reflect.getMetadata(
-        METADATA_KEY.unindexed,
+    expect(kind).eql("MyEntityKind");
+    expect(entityId).eql("entityId");
+    done();
+  });
+
+  it("should add excludeFromIndexes metadata to a class when properties was decorated with @excludeFromIndex", (done) => {
+
+    @entity("MyEntityKind")
+    class MyEntity {
+      @id()
+      public entityId: string;
+      @excludeFromIndex()
+      public excludedField1: string;
+      @excludeFromIndex()
+      public excludedField2: number[];
+    }
+
+    let excludeFromIndexes: string[] = Reflect.getMetadata(
+        METADATA_KEY.excludeFromIndexes,
         new MyEntity()
     );
 
-    expect(kind).eql("MyEntityKind");
-    expect(entityId).eql("entityId");
-    expect(unindexedFields).contains("unindexedField1");
-    expect(unindexedFields).contains("unindexedField2");
+    expect(excludeFromIndexes).contains("excludedField1");
+    expect(excludeFromIndexes).contains("excludedField2");
     done();
   });
 });

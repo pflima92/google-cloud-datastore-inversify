@@ -50,12 +50,12 @@ export function id(validationOptions?: ValidationOptions) {
 }
 
 /**
- * The field decorated will be unindexed.
+ * The field decorated will be excluded from entity indexes.
  */
-export function unindexed() {
+export function excludeFromIndex() {
   return (target: object, propertyKey: string) => {
-    let unIndexedFields = Reflect.getMetadata(METADATA_KEY.unindexed, target) || [];
-    unIndexedFields.push(propertyKey);
-    Reflect.defineMetadata(METADATA_KEY.unindexed, unIndexedFields, target);
+    let excludeFromIndexes = Reflect.getMetadata(METADATA_KEY.excludeFromIndexes, target) || [];
+    excludeFromIndexes.push(propertyKey);
+    Reflect.defineMetadata(METADATA_KEY.excludeFromIndexes, excludeFromIndexes, target);
   };
 }

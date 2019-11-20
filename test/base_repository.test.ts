@@ -1,6 +1,6 @@
 import {expect} from "chai";
 
-import {BaseRepository, entity, id, repository, TYPES, unindexed} from "../src";
+import {BaseRepository, entity, excludeFromIndex, id, repository, TYPES} from "../src";
 import {Container} from "inversify";
 import {Datastore} from "@google-cloud/datastore";
 import {anything, capture, instance, mock, verify, when} from "ts-mockito";
@@ -24,7 +24,7 @@ describe("Unit Test: BaseRepository", () => {
     class MyEntity {
       @id()
       public entityId: string;
-      @unindexed()
+      @excludeFromIndex()
       public unindexedProperty: string;
     }
 
