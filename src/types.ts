@@ -30,21 +30,21 @@ export class Filter {
   public static KEY = "__key__";
 
   public property: string;
-  public operator: Operator;
+  public operator: any;
   public value: string;
 
   public static create(field: string, operator: any, value: any): Filter {
     return new Filter(field, operator, value);
   }
 
-  constructor(property: string, operator: Operator, value: string) {
+  constructor(property: string, operator: any, value: string) {
     this.property = name;
     this.operator = operator;
     this.value = value;
   }
 }
 
-export type Operator = {
+export const Operator = {
   EQUAL: "=",
   NOT_EQUAL: "!=",
   LESS_THAN: "<",

@@ -17,7 +17,6 @@ export function queryBuilder(query: Query, req?: QueryRequest): Query {
 
     if (req.filter && req.filter.forEach) {
       req.filter.forEach(f =>
-          // @ts-ignore
           query.filter(f.property, f.operator, f.value)
       );
     }
