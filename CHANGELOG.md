@@ -7,8 +7,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 
 ## v0.2.0
 
+* Update [Wiki](https://github.com/pflima92/google-cloud-datastore-inversify/wiki)
 * Fix filter `Opeartors`
 * Add `excludeFromIndex` decorator to exclude a specific property from indexes
+* Add `entityOptions` for custom configurations
+* Add `excludeExtraneousValues` that allows ensure all properties from the type class
 
 ## v0.1.2
 
