@@ -5,6 +5,11 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v0.2.0
+
+* Fix filter `Opeartors`
+* Add `excludeFromIndex` decorator to exclude a specific property from indexes
+
 ## v0.1.2
 
 * Export `TYPES` for `Datastore` binding
