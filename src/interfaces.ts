@@ -14,6 +14,7 @@ namespace interfaces {
 
   export interface EntityOptions {
     excludeExtraneousValues?: false | true;
+    excludeLargeProperties?: false | true;
   }
 
   export interface CrudRepository<T> {

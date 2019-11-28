@@ -72,7 +72,11 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
 
   public async saveAll(ts: T[], ns?: Namespaced): Promise<T[]> {
 
-    const entities = ts.map(async t => await this.mapData(t, ns));
+    const entities = [];
+    for (let e of ts) {
+      const entity = await this.mapData(e, ns);
+      entities.push(entity);
+    }
     await this._db.save(entities);
     return Promise.resolve(ts);
   }
@@ -150,7 +154,8 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
     return {
       key: key,
       data: data,
-      excludeFromIndexes: excludeFromIndexes
+      excludeFromIndexes: excludeFromIndexes,
+      excludeLargeProperties: entityOptions!.excludeLargeProperties || false
     };
   }
 
@@ -192,4 +197,5 @@ interface EntityRequest {
   key: any;
   data: any;
   excludeFromIndexes: string[];
+  excludeLargeProperties: boolean;
 }
