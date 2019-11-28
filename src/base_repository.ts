@@ -154,7 +154,8 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
     return {
       key: key,
       data: data,
-      excludeFromIndexes: excludeFromIndexes
+      excludeFromIndexes: excludeFromIndexes,
+      excludeLargeProperties: entityOptions!.excludeLargeProperties || false
     };
   }
 
@@ -196,4 +197,5 @@ interface EntityRequest {
   key: any;
   data: any;
   excludeFromIndexes: string[];
+  excludeLargeProperties: boolean;
 }

@@ -98,6 +98,38 @@ describe("Unit Test: BaseRepository", () => {
     });
   });
 
+  it("should save an entity and excludeLargeProperties when decorated", (done) => {
+
+    @entity("MyEntityKind", {excludeLargeProperties: true})
+    class MyEntityWithExcludeLargeProperties {
+      @id()
+      public entityId: string;
+    }
+
+    @repository(MyEntityWithExcludeLargeProperties)
+    class TestRepositoryWithExcludeLargeProperties extends BaseRepository<MyEntityWithExcludeLargeProperties> {
+    }
+
+    // Setup Container
+    container.bind<TestRepositoryWithExcludeLargeProperties>(TestRepositoryWithExcludeLargeProperties).toSelf();
+    const fixture = container.get<TestRepositoryWithExcludeLargeProperties>(TestRepositoryWithExcludeLargeProperties);
+
+    // Give Parameters
+    const t = new MyEntityWithExcludeLargeProperties();
+    t.entityId = "some_id";
+
+    // @ts-ignore
+    when(mockDb.save(anything())).thenResolve();
+
+    // Then
+    fixture.save(t).then(result => {
+      const [saveRequest] = capture(mockDb.save).last();
+      expect(saveRequest.data.entityId).eql("some_id");
+      expect(saveRequest.excludeLargeProperties).eql(true);
+      done();
+    });
+  });
+
   it("should validate an entity annotated with validators and fail if it is not valid", async () => {
 
     @entity("MyEntityKind")

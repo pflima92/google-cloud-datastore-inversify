@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## v0.2.1
 
 * Fix `saveAll` on repository method
+* Add `excludeLargeProperties` on `entityOptions` when decorate an `@entity`
 
 ## v0.2.0
 
