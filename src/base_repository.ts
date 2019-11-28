@@ -72,7 +72,11 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
 
   public async saveAll(ts: T[], ns?: Namespaced): Promise<T[]> {
 
-    const entities = ts.map(async t => await this.mapData(t, ns));
+    const entities = [];
+    for (let e of ts) {
+      const entity = await this.mapData(e, ns);
+      entities.push(entity);
+    }
     await this._db.save(entities);
     return Promise.resolve(ts);
   }

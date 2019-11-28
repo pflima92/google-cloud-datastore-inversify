@@ -5,6 +5,10 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## v0.2.1
+
+* Fix `saveAll` on repository method
+
 ## v0.2.0
 
 * Update [Wiki](https://github.com/pflima92/google-cloud-datastore-inversify/wiki)
