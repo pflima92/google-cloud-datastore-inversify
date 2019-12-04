@@ -1,5 +1,5 @@
 import {expect} from "chai";
-import {entity, excludeFromIndex, id, interfaces, repository} from "../src";
+import {createdAt, entity, excludeFromIndex, id, interfaces, repository, updatedAt} from "../src";
 import {METADATA_KEY} from "../src/constants";
 
 describe("Unit Test: Decorators", () => {
@@ -71,6 +71,33 @@ describe("Unit Test: Decorators", () => {
 
     expect(excludeFromIndexes).contains("excludedField1");
     expect(excludeFromIndexes).contains("excludedField2");
+    done();
+  });
+
+  it("should identify the property decorated with @createdAt", (done) => {
+
+    @entity("MyEntityKindWithCreatedAt")
+    class MyEntityKindWithCreatedAt {
+      @id()
+      public entityId: string;
+      @createdAt()
+      public createdAtProperty: Date;
+      @updatedAt()
+      public updatedAtProperty: Date;
+    }
+
+    let createdAtMetadata: string = Reflect.getMetadata(
+        METADATA_KEY.createdAt,
+        new MyEntityKindWithCreatedAt()
+    );
+
+    let updatedAtMetadata: string = Reflect.getMetadata(
+        METADATA_KEY.updatedAt,
+        new MyEntityKindWithCreatedAt()
+    );
+
+    expect(createdAtMetadata).eql("createdAtProperty");
+    expect(updatedAtMetadata).eql("updatedAtProperty");
     done();
   });
 });

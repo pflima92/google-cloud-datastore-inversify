@@ -135,6 +135,17 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
       keyValue = Guid.create();
     }
 
+    let now = new Date();
+    let createdAtProperty = getCreatedAtProperty(t);
+    if (createdAtProperty && !t[createdAtProperty]) {
+      t[createdAtProperty] = now;
+    }
+
+    let updatedAtProperty = getUpdatedAtProperty(t);
+    if (updatedAtProperty) {
+      t[updatedAtProperty] = now;
+    }
+
     const concreteClass: T = plainToClass(this._entityIdentifier, t);
 
     const validationErrors = await validate(concreteClass);
@@ -187,6 +198,14 @@ function getEntityOptions(target: any): EntityOptions | undefined {
 
 function getIdProperty(target: any) {
   return Reflect.getMetadata(METADATA_KEY.entityId, target);
+}
+
+function getCreatedAtProperty(target: any) {
+  return Reflect.getMetadata(METADATA_KEY.createdAt, target);
+}
+
+function getUpdatedAtProperty(target: any) {
+  return Reflect.getMetadata(METADATA_KEY.updatedAt, target);
 }
 
 function getExcludeFromIndexes(target: any): string[] {
