@@ -65,3 +65,23 @@ export function excludeFromIndex() {
     Reflect.defineMetadata(METADATA_KEY.excludeFromIndexes, excludeFromIndexes, target);
   };
 }
+
+/**
+ * The field decorated will be assigned with a new date when created.
+ * The property decorated with this field must be a Data.
+ */
+export function createdAt() {
+  return (target: object, propertyKey: string) => {
+    Reflect.defineMetadata(METADATA_KEY.createdAt, propertyKey, target);
+  };
+}
+
+/**
+ * The field decorated will be assigned with a new date when updated.
+ * The property decorated with this field must be a Data.
+ */
+export function updatedAt() {
+  return (target: object, propertyKey: string) => {
+    Reflect.defineMetadata(METADATA_KEY.updatedAt, propertyKey, target);
+  };
+}

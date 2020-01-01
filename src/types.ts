@@ -101,3 +101,9 @@ export class EntityValidationError extends Error {
     this.errors = errors;
   }
 }
+
+export class PagedResponse<T> {
+  public data: T[];
+  public endCursor?: string;
+  public hasNext: boolean;
+}

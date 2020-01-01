@@ -7,6 +7,8 @@ const METADATA_KEY = {
   entity: "_entity",
   entityId: "_entity-id",
   excludeFromIndexes: "_excludeFromIndexes",
+  createdAt: "_createdAt",
+  updatedAt: "_updatedAt"
 };
 
 const CONTRAINTS = {
