@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](http://semver.org/).
 ## 0.3.0
 
 * Add `updatedAt` and `createdAt` audit decorators
+* Add `PagedBaseRepository` allowing return a `PagedResponse`
 
 ## v0.2.1
 

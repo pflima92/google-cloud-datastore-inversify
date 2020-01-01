@@ -1,4 +1,4 @@
-import {EntityIdentifier, Namespaced, QueryRequest} from "./types";
+import {EntityIdentifier, Namespaced, PagedResponse, QueryRequest} from "./types";
 
 namespace interfaces {
 
@@ -93,6 +93,17 @@ namespace interfaces {
      * @param ns the optional namespace for this operation.
      */
     removeAll(id: any[], ns?: Namespaced): Promise<boolean>;
+  }
+
+  export interface PagedCrudRepository<T> extends CrudRepository<T> {
+
+    /**
+     * Finds objects by using a Cloud Datastore query.
+     * @param queryRequest
+     * @return
+     */
+    findAllPaged(queryRequest?: QueryRequest): Promise<PagedResponse<T>>;
+
   }
 }
 

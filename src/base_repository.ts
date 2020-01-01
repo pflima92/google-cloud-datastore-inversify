@@ -2,12 +2,20 @@ import {inject, injectable} from "inversify";
 import {interfaces} from "./interfaces";
 import {METADATA_KEY, TYPES} from "./constants";
 import {Datastore} from "@google-cloud/datastore";
-import {EntityIdentifier, EntityValidationError, Namespaced, QueryRequest} from "./types";
+import {
+  EntityIdentifier,
+  EntityValidationError,
+  Namespaced,
+  PagedResponse,
+  QueryRequest
+} from "./types";
 import {Guid} from "guid-typescript";
 import {classToPlain, ClassTransformOptions, plainToClass} from "class-transformer";
 import {queryBuilder} from "./query_builder";
 import {validate} from "class-validator";
+import {RunQueryInfo} from "@google-cloud/datastore/build/src/query";
 import EntityOptions = interfaces.EntityOptions;
+import PagedCrudRepository = interfaces.PagedCrudRepository;
 
 @injectable()
 export class BaseRepository<T> implements interfaces.CrudRepository<T> {
@@ -179,6 +187,20 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
   }
 }
 
+@injectable()
+export class PagedBaseRepository<T> extends BaseRepository<T> implements PagedCrudRepository<T> {
+  public async findAllPaged(queryRequest?: QueryRequest): Promise<PagedResponse<T>> {
+    const query = this.createQuery(queryRequest);
+    const [results, queryInfo] = await this._db.runQuery(query);
+
+    const response = new PagedResponse<T>();
+    response.data = results;
+    response.hasNext = hasNext(queryInfo);
+    response.endCursor = queryInfo.endCursor;
+    return Promise.resolve(response);
+  }
+}
+
 function getEntityIdentifier(target: any) {
   const metadata: interfaces.RepositoryMetadata = Reflect.getMetadata(METADATA_KEY.repository, target);
   return metadata.entityIdentifier;
@@ -210,6 +232,10 @@ function getUpdatedAtProperty(target: any) {
 
 function getExcludeFromIndexes(target: any): string[] {
   return Reflect.getMetadata(METADATA_KEY.excludeFromIndexes, target) || [];
+}
+
+function hasNext(queryInfo: RunQueryInfo) {
+  return queryInfo.moreResults !== "NO_MORE_RESULTS";
 }
 
 interface EntityRequest {
