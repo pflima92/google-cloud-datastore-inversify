@@ -13,7 +13,7 @@ import {Guid} from "guid-typescript";
 import {classToPlain, ClassTransformOptions, plainToClass} from "class-transformer";
 import {queryBuilder} from "./query_builder";
 import {validate} from "class-validator";
-import {RunQueryInfo} from "@google-cloud/datastore/build/src/query";
+import {RunQueryResponse} from "@google-cloud/datastore/build/src/query";
 import EntityOptions = interfaces.EntityOptions;
 import PagedCrudRepository = interfaces.PagedCrudRepository;
 
@@ -109,6 +109,11 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
     return Promise.resolve(true);
   }
 
+  public async count(queryRequest?: QueryRequest): Promise<number> {
+    const [results] = await this.findAllKeys(queryRequest);
+    return results.length;
+  }
+
   protected createQuery(queryRequest?: QueryRequest) {
     const kind = this.kind();
     return queryBuilder(this._db.createQuery(kind), queryRequest);
@@ -185,6 +190,11 @@ export class BaseRepository<T> implements interfaces.CrudRepository<T> {
   protected kind() {
     return getKind(this._entityIdentifier);
   }
+
+  protected async findAllKeys(queryRequest?: QueryRequest): Promise<RunQueryResponse> {
+    const query = this.createQuery(queryRequest?.withSelection(["__key__"]));
+    return await this._db.runQuery(query);
+  }
 }
 
 @injectable()
@@ -195,7 +205,7 @@ export class PagedBaseRepository<T> extends BaseRepository<T> implements PagedCr
 
     const response = new PagedResponse<T>();
     response.data = results;
-    response.hasNext = hasNext(queryInfo);
+    response.moreResults = queryInfo.moreResults;
     response.endCursor = queryInfo.endCursor;
     return Promise.resolve(response);
   }
@@ -232,10 +242,6 @@ function getUpdatedAtProperty(target: any) {
 
 function getExcludeFromIndexes(target: any): string[] {
   return Reflect.getMetadata(METADATA_KEY.excludeFromIndexes, target) || [];
-}
-
-function hasNext(queryInfo: RunQueryInfo) {
-  return queryInfo.moreResults !== "NO_MORE_RESULTS";
 }
 
 interface EntityRequest {
