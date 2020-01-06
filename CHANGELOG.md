@@ -5,6 +5,12 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](http://keepachangelog.com/) 
 and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 0.4.0
+
+* Add `count` method to `Repository` interface based on find all keys approach
+* Remove method `hasNext` on `PagedResponse` to map correctly the `moreResults` property from original response
+* Add support for projections using `withSelect` method on `QueryRequest`
+
 ## 0.3.0
 
 * Add `updatedAt` and `createdAt` audit decorators

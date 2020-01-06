@@ -28,6 +28,10 @@ export function queryBuilder(query: Query, req?: QueryRequest): Query {
     if (req.limit && req.limit > 0) {
       query.limit(req.limit);
     }
+
+    if (req.select) {
+      query.select(req.select);
+    }
   }
   return query;
 }

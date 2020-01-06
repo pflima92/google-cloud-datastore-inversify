@@ -20,6 +20,12 @@ namespace interfaces {
   export interface CrudRepository<T> {
 
     /**
+     * Count all occurrences of entities of the given domain type.
+     * @param ns the optional namespace for this operation.
+     */
+    count(ns?: Namespaced): Promise<number>;
+
+    /**
      * Check if the given ID belongs to an entity in Cloud Datastore.
      * @param id the id of the entity.
      * @param ns the optional namespace for this operation.

@@ -15,10 +15,7 @@ export class QueryRequest extends Namespaced {
   public start?: string;
   public filter: Filter[] = [];
   public order?: Order;
-
-  public static namedQuery(query: string, args: any[]) {
-    return new QueryRequest();
-  }
+  public select?: string | string[] = [];
 
   public static create() {
     return new QueryRequest();
@@ -46,6 +43,11 @@ export class QueryRequest extends Namespaced {
 
   public withOrder(order: Order): QueryRequest {
     this.order = order;
+    return this;
+  }
+
+  public withSelection(select: string | string[]) {
+    this.select = select;
     return this;
   }
 }
@@ -105,5 +107,5 @@ export class EntityValidationError extends Error {
 export class PagedResponse<T> {
   public data: T[];
   public endCursor?: string;
-  public hasNext: boolean;
+  public moreResults?: "MORE_RESULTS_TYPE_UNSPECIFIED" | "NOT_FINISHED" | "MORE_RESULTS_AFTER_LIMIT" | "MORE_RESULTS_AFTER_CURSOR" | "NO_MORE_RESULTS";
 }
