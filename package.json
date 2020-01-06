@@ -1,6 +1,6 @@
 {
   "name": "inversify-datastore",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "description": "Some utilities for the development of Google Cloud Datastore applications using Inversify",
   "main": "lib/index.js",
   "jsnext:main": "es/index.js",
