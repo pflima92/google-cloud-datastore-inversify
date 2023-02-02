@@ -53,7 +53,7 @@
     "ts-mockito": "^2.5.0",
     "tslint": "5.19.0",
     "typescript": "^3.5.3",
-    "updates": "^8.5.3"
+    "updates": "^13.2.8"
   },
   "dependencies": {
     "@google-cloud/datastore": "^5.0.0",
